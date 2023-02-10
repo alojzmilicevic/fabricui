@@ -1,17 +1,29 @@
 import styled from '@emotion/styled';
-import { DragableListExample } from './components/DragableList/example/DragableListExample';
+import { JsonViewer } from './fui-fabric/json-viewer/JsonViewer';
+import { complexTestJson } from './fui-fabric/json-viewer/test/testData';
 
 const MainWrapper = styled.div`
     display: flex;
-    flex-direction: column;
     height: 100vh;
     background-color: white;
+    justify-content: center;
+`;
+
+const Content = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 744px;
+    padding: 20px;
     align-items: center;
 `;
 
 function App() {
     return (
         <MainWrapper>
+            <Content>
+                <JsonViewer json={complexTestJson} />
+            </Content>
         </MainWrapper>
     );
 }
