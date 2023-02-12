@@ -12,6 +12,7 @@ const StyledPre = styled('pre')<{ selected?: boolean }>(({ selected }) => ({
     margin: 0,
     lineHeight: 1.6,
     backgroundColor: 'revert',
+    width: '100%',
     ...(selected && {
         backgroundColor: '#dedede2e',
     }),
