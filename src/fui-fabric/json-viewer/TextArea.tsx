@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
+import { TransitionDelayed } from '../../components/transitions/TransitionDelay';
 import { Row } from './components/Row';
+import { TokenComponent } from './components/TokenComponent';
 import { Token } from './jsonTokenizer';
 import { getColor } from './theme';
-import { TokenComponent } from './components/TokenComponent';
-import { useState } from 'react';
-import { TransitionDelayed } from '../../components/transitions/TransitionDelay';
+import React, { useRef } from 'react';
 
 const Container = styled.div(props => ({
     display: 'flex',
@@ -34,62 +34,53 @@ const TokenRow = ({
     themeType: any;
     isCollapsed: any;
 }) => {
-
-    
     return (
-        <div style={{ width: '100%', display: 'flex' }}>
-            <Row onClick={() => setSelected(currentRow)} selected={selected === currentRow}>
-                {tokens.map((token: Token, currentCol: number) => (
-                    <TokenComponent
-                        token={token}
-                        collapsed={isCollapsed(currentRow)}
-                        color={getColor(token.type, themeType)}
-                        key={`row${currentCol}`}
-                    />
-                ))}
-            </Row>
-            <TransitionDelayed>
-                <div style={{ position: 'sticky', right: 0 }}>
-                    <button
-                        style={{
-                            position: 'absolute',
-                            right: 0,
-                            height: 24,
-                            display: 'flex',
-                            alignItems: 'center',
-                            fontSize: 12,
-                            width: 48,
-                            justifyContent: 'center',
-                        }}>
-                        Copy
-                    </button>
-                </div>
-            </TransitionDelayed>
-        </div>
+        <Row onClick={() => setSelected(currentRow)} selected={selected === currentRow}>
+            {tokens.map((token: Token, currentCol: number) => (
+                <TokenComponent
+                    token={token}
+                    collapsed={isCollapsed(currentRow)}
+                    color={getColor(token.type, themeType)}
+                    key={`row${currentCol}`}
+                />
+            ))}
+
+            <button
+                style={{
+                    width: 48,
+                    height: 24,
+                    fontSize: 12,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    position: 'fixed',
+                    marginLeft: 750,
+                }}>
+                Copy
+            </button>
+        </Row>
     );
 };
 
-const TextArea = ({ parsedData, themeType, setSelected, selected, isRowHidden, isCollapsed }: TextAreaProps) => {
-    return (
-        <Container>
-            {parsedData.map(
-                (tokens, currentRow) =>
-                    !isRowHidden(currentRow) && (
-                        <div style={{ display: 'flex' }} key={`row${currentRow}`}>
-                            <TokenRow
-                                tokens={tokens}
-                                currentRow={currentRow}
-                                setSelected={setSelected}
-                                selected={selected}
-                                themeType={themeType}
-                                isCollapsed={isCollapsed}
-                            />
-                        </div>
-                    )
-            )}
-        </Container>
-    );
-};
+const TextArea = ({ parsedData, themeType, setSelected, selected, isRowHidden, isCollapsed }: TextAreaProps) => (
+    <Container>
+        {parsedData.map(
+            (tokens, currentRow) =>
+                !isRowHidden(currentRow) && (
+                    <div key={`row${currentRow}`}>
+                        <TokenRow
+                            tokens={tokens}
+                            currentRow={currentRow}
+                            setSelected={setSelected}
+                            selected={selected}
+                            themeType={themeType}
+                            isCollapsed={isCollapsed}
+                        />
+                    </div>
+                )
+        )}
+    </Container>
+);
 
 type TextAreaProps = {
     parsedData: Token[][];

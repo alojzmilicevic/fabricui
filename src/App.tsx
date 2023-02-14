@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { JsonViewer } from './fui-fabric/json-viewer/JsonViewer';
 import { complexTestJson } from './fui-fabric/json-viewer/test/testData';
-import { TransitionDelayed } from './components/transitions/TransitionDelay';
 
 const MainWrapper = styled.div`
     display: flex;

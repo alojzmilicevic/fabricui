@@ -1,5 +1,4 @@
 import { getOppositeOrDefault, isBracket, Token } from "../jsonTokenizer";
-import * as React from "react";
 import styled from "@emotion/styled";
 
 const StyledToken = styled.div((props: { color: string }) => ({

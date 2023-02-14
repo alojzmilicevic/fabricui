@@ -1,4 +1,3 @@
-import * as React from 'react';
 import styled from '@emotion/styled';
 
 type RowProps = {
@@ -12,7 +11,7 @@ const StyledPre = styled('pre')<{ selected?: boolean }>(({ selected }) => ({
     margin: 0,
     lineHeight: 1.6,
     backgroundColor: 'revert',
-    width: '100%',
+    display: 'flex',
     ...(selected && {
         backgroundColor: '#dedede2e',
     }),

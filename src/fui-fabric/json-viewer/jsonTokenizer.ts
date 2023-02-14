@@ -21,6 +21,7 @@ interface JSONObject {
 
 type JSONArray = Array<JSONValue>;
 
+
 export enum TokenTypes {
     objectOpen = "object-open",
     objectClose = "object-close",
