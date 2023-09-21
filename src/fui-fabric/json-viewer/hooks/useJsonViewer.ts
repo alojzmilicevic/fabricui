@@ -37,17 +37,27 @@ export function isRowHeaderOrHidden(currentRow: number, collapsed: boolean[], br
     return isHidden;
 }
 
-function useJsonViewer({ json, themeType = Themes.AtomOneDark, tabSize = 4 }: JsonViewerProps) {
+export type JsonViewerReturn = {
+    parsedData: Token[][];
+    selected: number;
+    setSelected: (selected: number) => void;
+    customTheme: any;
+    isRowHidden: (currentRow: number) => boolean;
+    isCollapsed: (currentRow: number) => boolean;
+    onCollapseRow: (rowToCollapse: number) => void;
+    isCollapsible: (currentRow: number) => boolean;
+};
+
+function useJsonViewer({ json, themeType = Themes.AtomOneDark, tabSize = 4 }: JsonViewerProps): JsonViewerReturn {
     const jsonString: string = useMemo(() => JSON.stringify(json, null, tabSize), []);
     const parsedData: Token[][] = useMemo(() => tokenizeJson(jsonString), []);
     const bracketPairs: number[] = useMemo(() => generateBracketPairs(jsonString), []);
 
     const [selected, setSelected] = useState(DEFAULT_NUM_VALUE);
     const [collapsed, setCollapsed] = useState<boolean[]>(new Array(bracketPairs.length).fill(false));
+
     const theme = useTheme();
-
     const customTheme = createCustomTheme(themeType, theme);
-
     const isRowHidden = (currentRow: number) => isRowHeaderOrHidden(currentRow, collapsed, bracketPairs);
     const isCollapsed = (currentRow: number) => collapsed[currentRow];
     const isCollapsible = (currentRow: number) => bracketPairs[currentRow] !== DEFAULT_NUM_VALUE;

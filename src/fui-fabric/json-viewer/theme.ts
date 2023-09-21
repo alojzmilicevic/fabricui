@@ -1,19 +1,18 @@
 import { Theme } from '@emotion/react';
 import { TokenType } from './jsonTokenizer';
 
-
 enum TokenTypes {
-    objectOpen = "object-open",
-    objectClose = "object-close",
-    arrayOpen = "array-open",
-    arrayClose = "array-close",
-    boolean = "boolean",
-    number = "number",
-    string = "string",
-    variable = "variable",
-    keyValueSeparator = "key-value-separator",
-    whiteSpace = "white-space",
-    lineEndingComma = "line-ending-comma",
+    objectOpen = 'object-open',
+    objectClose = 'object-close',
+    arrayOpen = 'array-open',
+    arrayClose = 'array-close',
+    boolean = 'boolean',
+    number = 'number',
+    string = 'string',
+    variable = 'variable',
+    keyValueSeparator = 'key-value-separator',
+    whiteSpace = 'white-space',
+    lineEndingComma = 'line-ending-comma',
 }
 
 const Darcula = {
@@ -134,6 +133,12 @@ export const createCustomTheme = (themeType: string, theme: Theme) => ({
             primaryDarkColor: '#82EEF5',
             offsetColor: 'grey',
         },
+    },
+    palette: {
+        success: '#00b300',
+        error: '#ff0000',
+        warning: '#ffcc00',
+        info: '#00b3e6',
     },
     borderRadius: 12,
 });

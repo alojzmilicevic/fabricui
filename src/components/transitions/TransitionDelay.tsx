@@ -5,45 +5,36 @@ const Wrapper = styled.div<{ show: boolean }>(({ show }) => ({
     opacity: 0,
     transitionProperty: 'opacity',
     transitionDuration: '.25s',
-    cursor: 'default',
+    cursor: 'unset',
+
     ...(show && {
         opacity: '.99',
     }),
 }));
 
-const TransitionDelayed = ({ children, delay = 500 }: TransitionDelayedProps) => {
-    const [hovered, setHovered] = useState<boolean>(false);
+const TransitionDelayed = ({ children, delay = 500, shouldShow }: TransitionDelayedProps) => {
     const [show, setShow] = useState<boolean>(false);
 
     useEffect(() => {
-        if (hovered) {
+        if (shouldShow) {
             const timeout = setTimeout(() => {
                 setShow(true);
             }, delay);
 
-            return () => clearTimeout(timeout);
+            return () => {
+                setShow(false);
+                return clearTimeout(timeout);
+            };
         }
-    }, [hovered]);
+    }, [shouldShow]);
 
-    const onHover = () => {
-        setHovered(true);
-    };
-
-    const onLeave = () => {
-        setHovered(false);
-        setShow(false);
-    };
-
-    return (
-        <Wrapper show={show} onMouseEnter={onHover} onMouseLeave={onLeave}>
-            {children}
-        </Wrapper>
-    );
+    return <Wrapper show={show}>{children}</Wrapper>;
 };
 
 type TransitionDelayedProps = {
     children: React.ReactNode;
     delay?: number;
+    shouldShow?: boolean;
 };
 
 export { TransitionDelayed };

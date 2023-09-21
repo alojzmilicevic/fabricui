@@ -5,6 +5,7 @@ import { TextArea } from './TextArea';
 import { useJsonViewer } from './hooks/useJsonViewer';
 import { JSONValue } from './jsonTokenizer';
 import { Themes } from './theme';
+import { useState } from 'react';
 
 const Main = styled.div(props => ({
     display: 'flex',
@@ -13,6 +14,7 @@ const Main = styled.div(props => ({
     height: 600,
     width: 900,
     borderRadius: props.theme.borderRadius,
+    position: 'relative',
 
     '&::-webkit-scrollbar': {
         width: 20,
@@ -46,12 +48,25 @@ const Main = styled.div(props => ({
 const JsonViewer = (props: JsonViewerProps) => {
     const { themeType = Themes.AtomOneDark } = props;
     const { parsedData, customTheme, ...rest } = useJsonViewer(props);
+    const [scrollDistance, setScrollDistance] = useState(0);
+    const timer = null;
 
+    const handleScrollWithDelay = (e: any) => {
+        if (timer) {
+            clearTimeout(timer);
+        }
+
+        setTimeout(() => {
+            console.log(e);
+            
+            setScrollDistance(e.target.scrollLeft);
+        }, 400);
+    };
     return (
         <ThemeProvider theme={customTheme}>
-            <Main>
+            <Main onScroll={handleScrollWithDelay}>
                 <LineNumbers rowCount={parsedData.length} {...rest} />
-                <TextArea parsedData={parsedData} themeType={themeType} {...rest} />
+                <TextArea offset={scrollDistance} parsedData={parsedData} themeType={themeType} {...rest} />
             </Main>
         </ThemeProvider>
     );

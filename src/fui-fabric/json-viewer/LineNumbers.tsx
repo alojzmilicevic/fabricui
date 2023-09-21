@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from '@emotion/styled';
 import { CollapseIcon } from './components/CollapseIcon';
+import { JsonViewerReturn } from './hooks/useJsonViewer';
 
 const Container = styled.div(props => ({
     display: 'flex',
@@ -15,6 +16,7 @@ const Container = styled.div(props => ({
     minWidth: 48,
     position: 'sticky',
     left: 0,
+    width: 900,
 }));
 
 const NumberRow = styled.pre<{ selected: boolean }>(({ selected }) => ({
@@ -61,13 +63,11 @@ const LineNumbers = ({
     );
 };
 
-type LineNumbersProps = {
+type LineNumbersProps = Pick<
+    JsonViewerReturn,
+    'isRowHidden' | 'selected' | 'onCollapseRow' | 'isCollapsed' | 'isCollapsible'
+> & {
     rowCount: number;
-    selected: number;
-    isRowHidden: (currentRow: number) => boolean;
-    isCollapsed: (currentRow: number) => boolean;
-    isCollapsible: (currentRow: number) => boolean;
-    onCollapseRow: (rowToCollapse: number) => void;
 };
 
 export { LineNumbers };

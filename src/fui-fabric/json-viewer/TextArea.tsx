@@ -1,16 +1,15 @@
-import styled from '@emotion/styled';
-import { TransitionDelayed } from '../../components/transitions/TransitionDelay';
+import { styled } from '@mui/material';
 import { Row } from './components/Row';
 import { TokenComponent } from './components/TokenComponent';
+import { JsonViewerReturn } from './hooks/useJsonViewer';
 import { Token } from './jsonTokenizer';
 import { getColor } from './theme';
-import React, { useRef } from 'react';
 
-const Container = styled.div(props => ({
+const Container = styled('div')(props => ({
     display: 'flex',
     flexDirection: 'column',
     width: 'fit-content',
-    backgroundColor: props.theme.colors.main.primaryColor,
+    backgroundColor: "white",
     padding: '8px 0',
     cursor: 'text',
     height: 'fit-content',
@@ -19,76 +18,44 @@ const Container = styled.div(props => ({
     boxSizing: 'border-box',
 }));
 
-const TokenRow = ({
-    tokens,
-    currentRow,
-    setSelected,
-    selected,
-    themeType,
-    isCollapsed,
-}: {
-    tokens: any;
+type TokenRowProps = Pick<TextAreaProps, 'isCollapsed' | 'setSelected' | 'selected' | 'themeType'> & {
+    tokens: Token[];
     currentRow: number;
-    setSelected: any;
-    selected: number;
-    themeType: any;
-    isCollapsed: any;
-}) => {
-    return (
-        <Row onClick={() => setSelected(currentRow)} selected={selected === currentRow}>
-            {tokens.map((token: Token, currentCol: number) => (
-                <TokenComponent
-                    token={token}
-                    collapsed={isCollapsed(currentRow)}
-                    color={getColor(token.type, themeType)}
-                    key={`row${currentCol}`}
-                />
-            ))}
+    offset: number;
+};
 
-            <button
-                style={{
-                    width: 48,
-                    height: 24,
-                    fontSize: 12,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    position: 'fixed',
-                    marginLeft: 750,
-                }}>
-                Copy
-            </button>
-        </Row>
+const TokenRow = ({ tokens, currentRow, setSelected, selected, themeType, isCollapsed, offset }: TokenRowProps) => {
+    return (
+        <div>
+            <Row onClick={() => setSelected(currentRow)} selected={selected === currentRow}>
+                {tokens.map((token: Token, currentCol: number) => (
+                    <TokenComponent
+                        token={token}
+                        collapsed={isCollapsed(currentRow)}
+                        color={getColor(token.type, themeType)}
+                        key={`row${currentCol}`}
+                    />
+                ))}
+            </Row>
+        </div>
     );
 };
 
-const TextArea = ({ parsedData, themeType, setSelected, selected, isRowHidden, isCollapsed }: TextAreaProps) => (
+const TextArea = ({ parsedData, isRowHidden, ...rest }: TextAreaProps) => (
     <Container>
         {parsedData.map(
             (tokens, currentRow) =>
-                !isRowHidden(currentRow) && (
-                    <div key={`row${currentRow}`}>
-                        <TokenRow
-                            tokens={tokens}
-                            currentRow={currentRow}
-                            setSelected={setSelected}
-                            selected={selected}
-                            themeType={themeType}
-                            isCollapsed={isCollapsed}
-                        />
-                    </div>
-                )
+                !isRowHidden(currentRow) && <TokenRow tokens={tokens} currentRow={currentRow} {...rest} />
         )}
     </Container>
 );
 
-type TextAreaProps = {
-    parsedData: Token[][];
-    themeType: string;
-    selected: number;
-    setSelected: (index: number) => void;
-    isRowHidden: (currentRow: number) => boolean;
-    isCollapsed: (currentRow: number) => boolean;
+type TextAreaProps = Pick<
+    JsonViewerReturn,
+    'parsedData' | 'selected' | 'setSelected' | 'isRowHidden' | 'isCollapsed'
+> & {
+    themeType: string | undefined;
+    offset: number;
 };
 
 export { TextArea };
