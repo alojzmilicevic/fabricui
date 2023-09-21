@@ -14,7 +14,6 @@ export type Placement =
 
 export type Point = { x: number; y: number };
 
-
 type PositionData = {
     x: number;
     y: number;
@@ -31,61 +30,62 @@ function isTopOverflow(y: number, placement: Placement) {
     return placement.includes('top') && y < 0;
 }
 
-function isBottomOverflow(
-    y: number,
-    tooltipHeight: number,
-    position: Placement
-) {
-    return (
-        position.includes('bottom') && y + tooltipHeight > window.innerHeight
-    );
-}
+const isBottomOverflow = (y: number, tooltipHeight: number, position: Placement) =>
+    position.includes('bottom') && y + tooltipHeight > window.innerHeight;
 
-function isLeftOverflow(x: number, placement: Placement) {
-    return placement.includes('left') && x < 0;
-}
+const isLeftOverflow = (x: number, placement: Placement) => placement.includes('left') && x < 0;
 
-function isRightOverflow(
-    x: number,
-    tooltipWidth: number,
-    placement: Placement
-) {
-    return placement.includes('right') && x + tooltipWidth > window.innerWidth;
-}
+const isRightOverflow = (x: number, tooltipWidth: number, placement: Placement) =>
+    placement.includes('right') && x + tooltipWidth > window.innerWidth;
 
-const handleOverflow = (positionData: PositionData) => {
-    const {
-        x,
-        y,
-        childY,
-        childX,
-        childHeight,
-        childWidth,
-        tooltipHeight,
-        tooltipWidth,
-        placement,
-    } = positionData;
-
-    const topAnchor = childY;
-    const leftAnchor = childX;
-    const bottomAnchor = childY + childHeight;
-    const rightAnchor = childX + childWidth;
-
-    let dx = x;
-    let dy = y;
-
-    if (isTopOverflow(y, placement)) {
-        dy = bottomAnchor;
-    } else if (isBottomOverflow(y, tooltipHeight, placement)) {
-        dy = topAnchor - tooltipHeight;
-    } else if (isLeftOverflow(x, placement)) {
-        dx = rightAnchor;
-    } else if (isRightOverflow(x, tooltipWidth, placement)) {
-        dx = leftAnchor - tooltipWidth;
-    }
-
-    return { dx, dy };
-};
+    const handleOverflow = (positionData: PositionData) => {
+        const {
+            x,
+            y,
+            childY,
+            childX,
+            childHeight,
+            childWidth,
+            tooltipHeight,
+            tooltipWidth,
+            placement,
+        } = positionData;
+    
+        const topAnchor = childY;
+        const leftAnchor = childX;
+        const bottomAnchor = childY + childHeight;
+        const rightAnchor = childX + childWidth;
+    
+        let dx = x;
+        let dy = y;
+    
+        // Check available space
+        const availableTopSpace = childY;
+        const availableBottomSpace = window.innerHeight - (childY + childHeight);
+        const availableLeftSpace = childX;
+        const availableRightSpace = window.innerWidth - (childX + childWidth);
+    
+        if (isTopOverflow(y, placement)) {
+            if (tooltipHeight <= availableBottomSpace) {
+                dy = bottomAnchor; // Flip to bottom if there's enough space
+            }
+        } else if (isBottomOverflow(y, tooltipHeight, placement)) {
+            if (tooltipHeight <= availableTopSpace) {
+                dy = topAnchor - tooltipHeight; // Flip to top if there's enough space
+            }
+        } else if (isLeftOverflow(x, placement)) {
+            if (tooltipWidth <= availableRightSpace) {
+                dx = rightAnchor; // Flip to right if there's enough space
+            }
+        } else if (isRightOverflow(x, tooltipWidth, placement)) {
+            if (tooltipWidth <= availableLeftSpace) {
+                dx = leftAnchor - tooltipWidth; // Flip to left if there's enough space
+            }
+        }
+    
+        return { dx, dy };
+    };
+    
 
 export function calculatePosition(
     childX: number,

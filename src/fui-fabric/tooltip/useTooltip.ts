@@ -11,25 +11,23 @@ export function useTooltip({ children, position }: TooltipHook) {
         y: 0,
     });
 
-    const childRef = useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLDivElement>(null);
     const tooltipRef = useRef<HTMLDivElement>(null);
 
     const onMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => setAnchorEl(e.currentTarget);
     const onMouseLeave = () => setAnchorEl(null);
 
-    const childrenWithRef = cloneElement(children as React.ReactElement, {
-        ref: childRef,
-    });
+    const childrenWithRef = cloneElement(children as React.ReactElement, { ref });
 
     useLayoutEffect(() => {
-        if (!tooltipRef.current || !childRef.current || !anchorEl) return;
+        if (!tooltipRef.current || !ref.current || !anchorEl) return;
 
         const {
             x: childX,
             y: childY,
             width: childWidth,
             height: childHeight,
-        } = childRef.current.getBoundingClientRect();
+        } = ref.current.getBoundingClientRect();
 
         const { height: tooltipHeight, width: tooltipWidth } = tooltipRef.current.getBoundingClientRect();
 

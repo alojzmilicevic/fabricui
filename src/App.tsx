@@ -1,29 +1,20 @@
+import { useState } from 'react';
+import { Tooltip } from './fui-fabric/tooltip/Tooltip';
 import styled from '@emotion/styled';
-import { JsonViewer } from './fui-fabric/json-viewer/JsonViewer';
-import { complexTestJson } from './fui-fabric/json-viewer/test/testData';
 
 const MainWrapper = styled.div`
     display: flex;
-    height: 100vh;
-    background-color: white;
-    justify-content: center;
-`;
-
-const Content = styled.div`
-    display: flex;
     flex-direction: column;
-    width: 100%;
-    max-width: 744px;
-    padding: 20px;
-    align-items: center;
+    justify-content: center;
+    height: 100vh;
 `;
 
 function App() {
     return (
         <MainWrapper>
-            <Content>
-                <JsonViewer json={complexTestJson} />
-            </Content>
+            <Tooltip title="tooltip" position="left">
+                <div style={{ backgroundColor: 'red', maxWidth: 100, padding: 16, color: 'white' }}>hello</div>
+            </Tooltip>
         </MainWrapper>
     );
 }
