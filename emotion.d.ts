@@ -1,15 +1,21 @@
 import '@emotion/react';
 
 declare module '@emotion/react' {
-	export interface Theme {
-		colors: {
-			main: {
+    export interface Theme {
+        colors: {
+            main: {
                 primaryColor: string;
                 secondaryColor: string;
                 primaryDarkColor: string;
-				offsetColor: string;
-            }
-		};
-		borderRadius: number,
-	}
+                offsetColor: string;
+            };
+        };
+        palette: {
+            success: string;
+            error: string;
+            warning: string;
+            info: string;
+        };
+        borderRadius: number;
+    }
 }
